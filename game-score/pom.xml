@@ -27,7 +27,7 @@
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
-        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+        <exec-maven-plugin.version>1.4.0</exec-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -139,14 +139,16 @@
             </plugin>
 
             <!-- Make docker a part of maven flow -->
-            <!-- Build container -->
+
+
+            <!-- Build docker container for this artifact -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>${exec-maven-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>docker-package</id>
+                        <id>docker-build</id>
                         <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
@@ -160,6 +162,36 @@
                                 <argument>-t</argument>
                                 <argument>${project.groupId}/${project.artifactId}:${project.version}</argument>
                                 <argument>.</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Run container -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>docker-run</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>docker</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <arguments>
+                                <argument>container</argument>
+                                <argument>run</argument>
+                                <argument>-p</argument>
+                                <argument>8080:8080</argument>
+                                <argument>-p</argument>
+                                <argument>8081:8081</argument>
+                                <argument>-d</argument>
+                                <argument>${project.groupId}/${project.artifactId}:${project.version}</argument>
                             </arguments>
                         </configuration>
                     </execution>
