@@ -9,7 +9,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>${maven-shade-plugin.version}</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -40,7 +40,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>${maven-jar-plugin.version}</version>
         <configuration>
           <archive>
             <manifest>
@@ -52,15 +52,15 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
+        <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>${maven-source-plugin.version}</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -72,13 +72,38 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>${maven-javadoc-plugin.version}</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
             <goals>
               <goal>jar</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <id>docker-package</id>
+            <phase>package</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>docker</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>image</argument>
+                <argument>build</argument>
+                <argument>-t</argument>
+                <argument>${project.groupId}/${project.artifactId}:${project.version}</argument>
+                <argument>.</argument>
+              </arguments>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -140,10 +165,17 @@
     </dependencies>
   </dependencyManagement>
   <properties>
-    <dropwizard.version>2.0.2</dropwizard.version>
+    <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+    <junit.version>4.11</junit.version>
+    <java.version>1.8</java.version>
+    <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+    <maven-shade-plugin.version>3.1.1</maven-shade-plugin.version>
     <mainClass>org.practice.app.GameScoreApplication</mainClass>
+    <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
+    <dropwizard.version>2.0.2</dropwizard.version>
+    <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>4.11</junit.version>
+    <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
   </properties>
 </project>

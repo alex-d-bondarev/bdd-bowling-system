@@ -12,9 +12,9 @@ How to start the GameScore application from Dockerfile
 
 1. Download Docker from https://www.docker.com/get-docker
 1. Install Docker
-1. Run `mvn clean install` to build application
-1. Build image: `docker image build -t game-score .`
-1. Run image `docker container run -p 8080:8080 -p 8081:8081 -d game-score`
+1. Run `mvn clean install` to build application (including docker container)
+1. Run image `docker container run -p 8080:8080 -p 8081:8081 -d org.practice.app/game-score:1.0-SNAPSHOT` 
+(may very, based on service version).
 1. To check that application is running navigate to url `http://localhost:8081/healthcheck`
 1. To stop running image `docker stop $(docker ps -aq)` (stops all images, including non project ones).
 1. To clear environment from image `docker rm $(docker ps -aq)` (clears all images, including non project ones).
