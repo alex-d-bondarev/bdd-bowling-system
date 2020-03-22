@@ -1,6 +1,6 @@
-package org.practice.app;
+package org.practice.app.core;
 
-public class Game {
+public class GameScorer {
     private int rolls[] = new int[21];
     private int currentRoll = 0;
 

@@ -1,16 +1,16 @@
-package org.practice.app;
+package org.practice.app.core;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class BowlingTest {
-    private Game g;
+public class GameScorerTest {
+    private GameScorer g;
 
     @Before
     public void setUp(){
-        g = new Game();
+        g = new GameScorer();
     }
 
     @Test
