@@ -202,7 +202,34 @@
             </plugin>
 
             <!-- Run Integration tests -->
-            <!-- TBD -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <executions>
+                    <!-- Launch integration tests -->
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <skipAfterFailureCount>1</skipAfterFailureCount>
+                            <includes>
+                                <include>
+                                    **/IntegrationTest*.java
+                                </include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <!-- Fail build if integration tests failed -->
+                    <execution>
+                        <id>update-build-status</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- Stop Container after tests -->
             <plugin>
@@ -221,6 +248,30 @@
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <arguments>
                                 <argument>stop</argument>
+                                <argument>${project.artifactId}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Clear docker image after tests -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>docker-rm-after-tests</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>docker</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <arguments>
+                                <argument>rm</argument>
                                 <argument>${project.artifactId}</argument>
                             </arguments>
                         </configuration>
