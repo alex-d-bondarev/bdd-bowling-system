@@ -139,6 +139,39 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>${build-helper-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>include-specs-code</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/specs/java</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>include-specs-features</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/specs/resources</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>3.0.0-M4</version>
         <executions>
@@ -150,8 +183,15 @@
               <skipAfterFailureCount>1</skipAfterFailureCount>
               <includes>
                 <include>**/IntegrationTest*.java</include>
+                <include>**/CucumberRunner.java</include>
               </includes>
             </configuration>
+          </execution>
+          <execution>
+            <id>update-build-status</id>
+            <goals>
+              <goal>verify</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
@@ -266,8 +306,10 @@
     <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
     <dropwizard.version>2.0.2</dropwizard.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+    <build-helper-maven-plugin.version>3.1.0</build-helper-maven-plugin.version>
     <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <cucumber.version>5.5.0</cucumber.version>
   </properties>
 </project>
